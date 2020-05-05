@@ -1,0 +1,64 @@
+ 
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <title> Titre </title>
+    </head>
+    <body>
+        <a href="textlistforms.html">Text&amp;List&amp;Forms</a>
+        <a href="tables.html">Tableaux</a>
+        <a href="medias.html">Médias</a>
+        <hr>
+        <ul>
+            <li>Etudiant</li>
+            <li>Enseignant</li>
+            <li>Abbreviations</li>
+        </ul>
+        <hr>
+        <ol>
+            <li><h1>Etudiant</h1></li>
+            <form action="textlistforms.html" method="get">
+                Prénom:
+                <input type="text" name="fname">
+                Nom:
+                <input type="text" name="iname">
+                <br>
+                Années d'études
+                <input type="radio" name="A" value="1A" checked>1A
+                <input type="radio" name="A" value="2A" >2A
+                <input type="radio" name="A" value="3A" >3A
+                <br>
+                Remarques:<br>
+                <textarea name="entry"></textarea>
+                <br>
+                <input type="submit" value="Valider">
+            </form>
+            <hr>
+            <li><h1>Enseignant</h1></li>
+            <form action="medias.html" method="get">
+                Prénom:<br>
+                <input type="text" name="fname"><br>
+                Nom:<br>
+                <input type="text" name="iname"><br>
+                Sites:<br>
+                <select name="site">
+                    <option>Nantes</option>
+                    <option>Brest</option>
+                    <option>Rennes</option>
+                </select><br>
+                Mot de passe:<br>
+                <input type="password" name="pswd">
+                <br>
+                <input type="submit" value="Valider">
+            </form>
+            <hr>
+            <li><h1>Abbreviations</h1></li>
+            <h2>Isen</h2>
+            <blockquote>Institut du Supérieur de l'Electronique et du Numérique</blockquote> 
+            <h2>HTML</h2>
+            <blockquote>HyperText Marhup Language</blockquote> 
+            <hr>
+        </ol>
+    </body>
+</html>
