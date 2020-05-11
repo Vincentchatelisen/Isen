@@ -1,0 +1,9 @@
+p { font-family:  Verdana,sans-serif; }
+h1 {font-family: 'Marko One',georgia; font-size: 1.5em; color: #993399; text-shadow:#D3D3D3 ;}
+h2 {font-size: 1em; color: #CC6600; text-align: center;}
+span.price {font-family: Georgia; color: #808080;}
+p.warning {color: #FF6347;}
+title {color:#808080;}
+dt>strong {color: #FF0000;}
+dt {color: #A0522D;}
+#div1 {text-align: center;}
