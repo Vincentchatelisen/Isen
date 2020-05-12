@@ -1,0 +1,34 @@
+body {
+  font-family: Georgia, serif;
+  line-height: 1.5em;
+}
+h1 {
+  font-size: 4em;
+  font-weight: normal;
+}
+h2 {
+  font-size: 1.2em;
+  margin-top: 0;
+}
+#menu {
+  border: 3px solid #783F27;
+}
+section {
+  background: #F6F3ED;
+  margin: 10px;
+  padding: 20px;
+  border: 1px dotted maroon;
+  width: 240px;
+}
+.title {
+  background-color: #783F27;
+  color: #F9AB33;
+  line-height: 4em;
+}
+.price {
+  font-weight: bold;
+  background: #F9AB33;
+  padding: 5px;
+  width: 100%;
+  text-align: center;
+}
