@@ -1,0 +1,135 @@
+
+html {
+    box-sizing: border-box;
+  }
+  * {
+    box-sizing: inherit;
+  }
+  body {
+    font-family: Georgia, serif; 
+    font-size: 100%;
+    background-color: white;
+    margin: 0;
+  }
+  
+  /* GRID STYLES START HERE */
+  #layout {
+    
+    margin-left: 5%;
+    margin-right: 5%;
+    display: grid;
+    grid-template-rows: 3em 20px 150px 300px 5em;
+    grid-template-columns: 1fr 20px 150px 20px 150px 20px 150px;
+
+  }
+  nav {
+    grid-row-start: 1;
+    grid-row-end: 2;
+    grid-column-start: 1;
+    grid-column-end: 8;
+  }
+  main {
+    grid-row-start: 3;
+    grid-row-end:6;
+    grid-column-start: 1;
+    grid-column-end: 2;
+  }
+  #figA {
+    grid-row-start: 3;
+    grid-row-end:4;
+    grid-column-start: 3;
+    grid-column-end: 4;
+
+  }
+  #figB {
+    grid-row-start: 3;
+    grid-row-end:4;
+    grid-column-start: 5;
+    grid-column-end: 6;
+  }
+  #figC {
+    grid-row-start: 3;
+    grid-row-end:4;
+    grid-column-start: 7;
+    grid-column-end: 8;
+  }
+  footer {
+    grid-row-start: 5;
+    grid-row-end:6;
+    grid-column-start: 2;
+    grid-column-end: 8;
+
+  }
+  /* VISUAL STYLES START HERE */
+  
+  /* link styles */
+  a:link, a:visited { color: #DC6903; }
+  a:focus, a:hover, a:active { color: #F9AB33; }
+  
+  a {
+    text-decoration: none;
+    border-bottom: 1px dotted;
+    padding-bottom: .2em;
+  }
+  
+  
+  
+  /* nav styles */
+  nav, footer {
+    font-family: verdana, sans-serif;
+    background-color: #783F27;
+  }
+  nav ul li a:link, nav ul li a:visited {
+    color: #F9AB33;
+  }
+  nav ul li a:focus, nav ul li a:hover, nav ul li a:active {
+    color: #fff;
+  }
+  nav ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    display: flex;
+    justify-content: center;
+  }
+  nav ul li {
+    font-size: .8em;
+    text-transform: uppercase;
+    letter-spacing: .2em;
+  }
+  nav ul li a {
+    display: block;
+    border: 1px solid;
+    border-radius: .5em;
+    padding: .5em 1em;
+    margin: .5em; 
+  }
+  
+  
+  /* main styles */
+  main {
+    font-family: 'Stint Ultra Expanded', Georgia, serif;
+    background-color: white;
+    line-height: 1.8em;
+    color: #555;
+    padding: 1em;
+    border: double 4px #EADDC4;
+    border-radius: 25px;
+  }
+  
+  
+  /* misc styles */
+  
+  figure {
+    margin: 0;
+    padding: 0;
+     /* clears browser styles for figures */
+  }
+  
+  footer {
+    color: #EADDC4;
+    text-align: center;
+    font-size: .8em;
+    padding: .5em;
+  }
+  

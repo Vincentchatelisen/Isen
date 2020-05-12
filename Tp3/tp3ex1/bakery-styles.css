@@ -1,8 +1,7 @@
 body{font-family: 'Stint Ultra Expanded', cursive;}
-a:link {color: #F9AB33;}
 a:hover {color: #608080;}
 /*ul>li>a:visited{color: #F9AB33;}*/
-a {border-bottom: dotted ;border-width: 1px;text-decoration: none;}
+a {border-bottom: dotted ;border-width: 1px;text-decoration: none;color: #F9AB33;}
 ul {list-style: none;}
 nav {background-color: #783F27;font-family: Verdana;font-size: 0.8em;letter-spacing: 0.3em;text-transform: uppercase;}
 header {text-align: center;background-image: url(images/croissants_banner.jpg);background-repeat: no-repeat;background-position: center;background-size: cover;}
