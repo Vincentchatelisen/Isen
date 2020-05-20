@@ -62,11 +62,12 @@ void tache_arrivee( void *pvParameters )
 		xQueueSendToBack(File_tapis_arrivee, &colis, TIMEOUT_FILE_TAPIS_ARRIVEE); // Il faudra gérer le débordement et afficher un message d'erreur
 		vTaskDelay(liste_delai[num_colis % (sizeof(liste_colis)/sizeof(unsigned int))]/portTICK_RATE_MS); // Attente entre deux colis en ms
 		if(xSemaphore != NULL){
-			if(xSemaphoreTake(xSemaphore,portMAX_DELAY == pdTRUE)){
+			if(pdTRUE==xSemaphoreTake(xSemaphore,portMAX_DELAY)){
 				printf("Le colis No %d est depose sur le tapis roulant et il porte l'etiquette %d\n",num_colis, colis);	// Il faudra gérer l'affichage comme une ressource partagée
 				xSemaphoreGive(xSemaphore);
 			}
-		}	
+		}
+		
 		num_colis++;
 		
   }
@@ -74,11 +75,12 @@ void tache_arrivee( void *pvParameters )
 }
 
 void affiche_message(char *texte, unsigned int colis){
-	if(xSemaphoreTake(xSemaphore,portMAX_DELAY == pdTRUE)){
-		printf("%s : compteur= %d B2= %d B1= %d B0= %d",texte ,colis,(colis & (1<<2)>>2),(colis & (1<<1)>>1),(colis & (1<<0))  );
-		xSemaphoreGive(xSemaphore);
+	if(xSemaphore != NULL){
+		if(pdTRUE==xSemaphoreTake(xSemaphore,portMAX_DELAY)){
+			printf("%s : compteur= %d B2= %d B1= %d B0= %d \n",texte ,colis>>3,(colis & 1<<2)>>2,(colis & 1<<1)>>1,(colis & 1<<0)  );
+			xSemaphoreGive(xSemaphore);
+		}
 	}
-	
 }
 
 void tache_lecture_rapide(void *pvParameters){
@@ -86,17 +88,32 @@ void tache_lecture_rapide(void *pvParameters){
 	//vTaskDelay(1000);
 	while(1)
 		{
-		if(File_tapis_arrivee !=0){
-			xQueueReceive(File_tapis_arrivee, &colis,TIMEOUT_FILE_TAPIS_ARRIVEE);
-			if((colis & (1<<1)>>1) == 1){
-				xQueueSendToBack(File_tapis_relecture, &colis, TIMEOUT_FILE_TAPIS_RELECTURE); // Il faudra gérer le débordement et afficher un message d'erreur
-			}
+		if(xQueueReceive(File_tapis_arrivee, &colis,TIMEOUT_FILE_TAPIS_ARRIVEE)){
+			
+			vTaskDelay(TIMEOUT_FILE_TAPIS_ARRIVEE);
+			if((colis & 1<<1)>>1 == 1){
+				xQueueSendToBack(File_tapis_relecture, &colis, TIMEOUT_FILE_TAPIS_RELECTURE);
+				/*if(pdTRUE==xSemaphoreTake(xSemaphore,portMAX_DELAY)){
+					printf("Le colis No %d est depose sur le tapis roulant relecture et il porte l'etiquette %d\n",colis>>3, colis );
+					xSemaphoreGive(xSemaphore);
+				}*/
+				}
 			else{
-				if((colis & (1<<0)>>0) == 1){
-					xQueueSendToBack(File_depart_international, &colis, TIMEOUT_FILE_TAPIS_DEPART); // Il faudra gérer le débordement et afficher un message d'erreur
+				if((colis & 1<<0) == 1){
+					xQueueSendToBack(File_depart_international, &colis, TIMEOUT_FILE_TAPIS_DEPART);
+					/*if(pdTRUE==xSemaphoreTake(xSemaphore,portMAX_DELAY)){
+						printf("Le colis No %d est depose sur le tapis roulant international et il porte l'etiquette %d\n",colis>>3, colis );
+						xSemaphoreGive(xSemaphore);
+					}*/
+					
 				}
 				else{
-					xQueueSendToBack(File_depart_national, &colis, TIMEOUT_FILE_TAPIS_DEPART); // Il faudra gérer le débordement et afficher un message d'erreur
+					xQueueSendToBack(File_depart_national, &colis, TIMEOUT_FILE_TAPIS_DEPART);
+					/*if(pdTRUE==xSemaphoreTake(xSemaphore,portMAX_DELAY)){
+						printf("Le colis No %d est depose sur le tapis roulant national et il porte l'etiquette %d\n",colis>>3, colis );
+						xSemaphoreGive(xSemaphore);
+					}*/
+					
 				}
 			}
 		}
@@ -106,10 +123,14 @@ void tache_lecture_rapide(void *pvParameters){
 
 void tache_depart_national(void *pvParameters){
 	unsigned int colis;
+	//printf("%d",prvIsQueueEmpty(File_tapis_arrivee);
+	//vTaskDelay(300);
 	while(1)
 		{
-		if(File_depart_national != 0){
-			xQueueReceive(File_depart_national, &colis,TIMEOUT_FILE_TAPIS_DEPART);
+		if(xQueueReceive(File_depart_national, &colis,TIMEOUT_FILE_TAPIS_DEPART)){
+			vTaskDelay(TIMEOUT_FILE_TAPIS_DEPART);
+			
+			//printf("depart national : compteur= %d B2= %d B1= %d B0= %d \n" ,colis>>3,(colis & (1<<2)>>2),(colis & (1<<1)>>1),(colis & (1<<0))  );
 			affiche_message("Depart national",colis);
 		}
 	}
@@ -117,16 +138,43 @@ void tache_depart_national(void *pvParameters){
 }
 void tache_depart_international(void *pvParameters){
 	unsigned int colis;
-	//vTaskDelay(1000);
+	//vTaskDelay(300);
 	while(1)
 		{
-		if(File_depart_international != 0){
-			xQueueReceive(File_depart_international, &colis,TIMEOUT_FILE_TAPIS_DEPART);
+		if(xQueueReceive(File_depart_international, &colis,TIMEOUT_FILE_TAPIS_DEPART)){
+			vTaskDelay(TIMEOUT_FILE_TAPIS_DEPART);
+			
+			//printf("depart international : compteur= %d B2= %d B1= %d B0= %d \n" ,colis>>3,(colis & (1<<2)>>2),(colis & (1<<1)>>1),(colis & (1<<0))  );
 			affiche_message("Depart international",colis);
 		}
 	}
 	vTaskDelete( NULL );
 }
+
+void tache_relecture(void *pvParameters){
+	unsigned int colis;
+	unsigned int num_colis;
+	unsigned int numero;
+	while(1){
+		if(xQueueReceive(File_tapis_relecture, &colis,TIMEOUT_FILE_TAPIS_RELECTURE)){
+			vTaskDelay(TIMEOUT_FILE_TAPIS_DEPART);
+			
+			num_colis = colis>>3;
+			colis = (num_colis<<3)+ 4+ (colis & (1<<0));
+			
+
+			xQueueSendToFront(File_tapis_arrivee, &colis,TIMEOUT_FILE_TAPIS_RELECTURE);
+			//printf("depart international : compteur= %d B2= %d B1= %d B0= %d \n" ,colis>>3,(colis & (1<<2)>>2),(colis & (1<<1)>>1),(colis & (1<<0))  );
+			affiche_message("Retour relecture",colis);
+		}
+	
+	}
+	
+	
+
+}
+
+
 
 // Main()
 int main(void)
@@ -151,8 +199,8 @@ int main(void)
 								1, 												// Niveau de priorité 1 pour la tâche (0 étant la plus faible) 
 								NULL ); 									// Pas d'utilisation du task handle
 										// Pas d'utilisation du task handle
-	xReturned = xTaskCreate( 	tache_lecture_rapide,// Pointeur vers la fonction
-								"Tache relecture",					// Nom de la tâche, facilite le debug
+	 xReturned = xTaskCreate( 	tache_lecture_rapide,// Pointeur vers la fonction
+								"Tache tri",					// Nom de la tâche, facilite le debug
 								configMINIMAL_STACK_SIZE, // Taille de pile (mots)
 								NULL, 										// Pas de paramètres pour la tâche
 								1, 												// Niveau de priorité 1 pour la tâche (0 étant la plus faible) 
@@ -168,7 +216,13 @@ int main(void)
 								configMINIMAL_STACK_SIZE, // Taille de pile (mots)
 								NULL, 										// Pas de paramètres pour la tâche
 								1, 												// Niveau de priorité 1 pour la tâche (0 étant la plus faible) 
-								NULL ); 	 								
+								NULL ); 	
+	xReturned = xTaskCreate( 	tache_relecture,// Pointeur vers la fonction
+								"Tache relecture",					// Nom de la tâche, facilite le debug
+								configMINIMAL_STACK_SIZE, // Taille de pile (mots)
+								NULL, 										// Pas de paramètres pour la tâche
+								1, 												// Niveau de priorité 1 pour la tâche (0 étant la plus faible) 
+								NULL ); 	 		 								
 										
 										
 	// Lance le scheduler et les taches associées 
